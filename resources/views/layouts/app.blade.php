@@ -77,6 +77,7 @@
         <div class="row">
         <div class="col-md-4">
           <div class="card">
+            <a href="{{ route('posts.create') }}" class="btn btn-outline-primary m-2">Add a new post</a>
             <div class="card-header">Categories</div>
             <div class="card-body">
               <ul class="list-group">

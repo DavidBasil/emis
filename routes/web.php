@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/forum', 'ForumsController@index')->name('forum');
 
 Auth::routes();
 
@@ -23,4 +21,5 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('categories', 'CategoriesController');
     Route::get('posts/create', 'PostsController@create')->name('posts.create');
     Route::post('posts/store', 'PostsController@store')->name('posts.store');
+    Route::get('posts/{post}', 'PostsController@show')->name('posts.show');
 });

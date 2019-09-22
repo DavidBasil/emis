@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Session;
 use App\Post;
+use App\Comment;
 
 class PostsController extends Controller
 {
@@ -38,5 +39,20 @@ class PostsController extends Controller
     public function show($id)
     {
         return view('posts.show')->with('post', Post::findOrFail($id));
+    }
+
+    public function comment(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+
+        $comment = Comment::create([
+            'user_id' => Auth::id(),
+            'post_id' => $id,
+            'content' => $request->content
+        ]);
+
+        Session::flash('success', 'Comment added');
+
+        return redirect()->back();
     }
 }

@@ -8,6 +8,7 @@
         <div class="row">
           <div class="col-md-6">
             <h4>{{ $post->title }}</h4> 
+            <span>{{ $post->created_at->diffForHumans() }}</span>
           </div>
           <div class="col-md-6">
             <img src="{{ $post->user->avatar }}" alt="" class="img-fluid rounded-circle w-25 ml-5">

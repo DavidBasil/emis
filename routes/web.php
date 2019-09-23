@@ -21,6 +21,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('categories', 'CategoriesController');
     Route::get('posts/create', 'PostsController@create')->name('posts.create');
     Route::post('posts/store', 'PostsController@store')->name('posts.store');
-    Route::get('posts/{post}', 'PostsController@show')->name('posts.show');
     Route::post('posts/comment/{id}', 'PostsController@comment')->name('post.comment');
+    Route::get('comment/like/{id}', 'CommentsController@like')->name('comment.like');
+    Route::get('comment/unlike/{id}', 'CommentsController@unlike')->name('comment.unlike');
 });
+
+Route::get('posts/{post}', 'PostsController@show')->name('posts.show');

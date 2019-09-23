@@ -66,7 +66,7 @@
 @push('scripts')
 <script charset="utf-8">
   $(function(){
-
+    // edit comment
     $('#editComment').on('click', function(){
       if($(this).html() === 'edit comment'){
         $(this).html('save')
@@ -86,16 +86,16 @@
           url: '/comments/'+ commentId,
           data: { content: content },
           success: function(data){
-            $('#content').parent().prepend('<p class="text-success message">Comment Updated!</p>').hide().fadeIn();
+            $('#content').parent().prepend('<p class="alert alert-success message">Comment Updated!</p>').hide().fadeIn();
             setTimeout(function(){
             $('.message').fadeOut();
             }, 2000)
           }
         })
       }
-    })
+    }) // end of edit comment
 
-  })
+  }) // end of $(function())
 </script>  
 @endpush
 @endsection

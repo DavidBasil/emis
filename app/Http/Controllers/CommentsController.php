@@ -10,6 +10,21 @@ use App\Like;
 
 class CommentsController extends Controller
 {
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'content' => 'required'
+        ]);
+
+        $comment = Comment::find($id);
+
+        $comment->content = $request->content;
+
+        $comment->save();
+
+        return 'success';
+    }
+
     public function like($id)
     {
         $comment = Comment::find($id);

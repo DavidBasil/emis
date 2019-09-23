@@ -10,7 +10,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -77,7 +76,11 @@
         <div class="row">
         <div class="col-md-4">
           <div class="card">
-            <a href="{{ route('posts.create') }}" class="btn btn-outline-primary m-2">Add a new post</a>
+            @auth
+              <a href="{{ route('posts.create') }}" class="btn btn-outline-primary m-2">Add a new post</a>
+            @else
+              <a href="{{ route('login') }}">Login</a> to create a new post
+            @endauth
             <div class="card-header">Categories</div>
             <div class="card-body">
               <ul class="list-group">
@@ -98,5 +101,10 @@
         </div>
       </div>
     </div>
-  </body>
+
+
+<!-- scripts -->
+<script src="{{ asset('js/app.js') }}"></script>
+@stack('scripts')
+</body>
 </html>

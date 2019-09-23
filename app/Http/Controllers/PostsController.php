@@ -55,4 +55,28 @@ class PostsController extends Controller
 
         return redirect()->back();
     }
+
+    public function edit($id)
+    {
+        return view('posts.edit')->with('post', Post::findOrFail($id));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'title' => 'required',
+            'image' => 'required'
+        ]);
+
+        $post = Post::find($id);
+
+        $post->title = $request->title;
+        $post->image = $request->image;
+
+        $post->save();
+
+        Session::flash('success', 'Post updated');
+
+        return redirect()->route('posts.show', ['id' => $post->id]);
+    }
 }

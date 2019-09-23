@@ -5,14 +5,28 @@
   <div class="card"> <!-- post card -->
 
     <div class="card-body">
-      <h3>{{ $post->title }}</h3>
+      <h3 class="pull-left">{{ $post->title }}</h3>
+      @if (Auth::id() == $post->user->id)
+        <a href="{{ route('posts.edit', ['id' => $post->id]) }}" class="">edit</a>
+      @endif
+      <p>
+        <a href="{{ route('categories.show', ['id' => $post->category->id]) }}">{{ $post->category->title }}</a>
+      </p>
       <img src="{{ $post->image }}" alt="" class="img-fluid">
     </div>
 
     <ul>
     @foreach ($post->comments as $comment)
-      <li>{{ $comment->content }} 
-        <span>{{ $comment->user->name }} | <img src="{{ $comment->user->avatar }}" alt="" class="img-fluid" width="40"></span>
+      <li>
+        <div>
+          <textarea name="content" id="content" readonly>{{ $comment->content }}</textarea>
+        </div>
+        {{ $comment->user->name }} 
+        @if (Auth::id() == $comment->user_id)
+          <input type="hidden" name="" id="commentId" value={{ $comment->id }}>
+          <button id="editComment">edit comment</button> 
+        @endif
+        <img src="{{ $comment->user->avatar }}" alt="" class="img-fluid" width="40">
         <p>
         @if ($comment->is_liked_by_user())
           <a href="{{ route('comment.unlike', ['id' => $comment->id]) }}" class="btn btn-danger btn-sm">Unlike</a>
@@ -27,6 +41,7 @@
 
   </div> <!-- end of post card -->
 
+  @auth
   <div class="card mt-4"> <!-- comment card -->
 
     <div class="card-body">
@@ -44,5 +59,43 @@
     </div>
 
   </div> <!-- end of comment card -->
+  @else
+    <a href="{{ route('login') }}">Login</a> to post a comment
+  @endauth
+  
+@push('scripts')
+<script charset="utf-8">
+  $(function(){
 
+    $('#editComment').on('click', function(){
+      if($(this).html() === 'edit comment'){
+        $(this).html('save')
+        $('#content').attr('readonly', false).css('border', '3px solid pink');
+      } else {
+        $(this).html('edit comment')
+        $('#content').attr('readonly', true).css('border', '1px solid black');
+        var content = $('#content').val();
+        var commentId = $('#commentId').val();
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+          type: 'POST',
+          url: '/comments/'+ commentId,
+          data: { content: content },
+          success: function(data){
+            $('#content').parent().prepend('<p class="text-success message">Comment Updated!</p>').hide().fadeIn();
+            setTimeout(function(){
+            $('.message').fadeOut();
+            }, 2000)
+          }
+        })
+      }
+    })
+
+  })
+</script>  
+@endpush
 @endsection

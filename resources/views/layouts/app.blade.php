@@ -83,7 +83,7 @@
               <ul class="list-group">
                 @foreach ($categories as $category)
                  <li class="list-group-item">
-                   {{ $category->title }}
+                   <a href="{{ route('categories.show', ['id' => $category->id]) }}">{{ $category->title }}</a>
                  </li> 
                 @endforeach
               </ul>

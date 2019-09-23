@@ -19,6 +19,7 @@
         @else 
           <a href="{{ route('comment.like', ['id' => $comment->id]) }}" class="btn btn-success btn-sm">Like</a>
         @endif
+          <span class="badge">{{ $comment->likes->count() }}</span>
         </p>
       </li>
     @endforeach

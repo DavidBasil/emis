@@ -17,7 +17,7 @@
       <p>
         <a href="{{ route('categories.show', ['id' => $post->category->id]) }}">{{ $post->category->title }}</a>
       </p>
-      <img src="{{ $post->image }}" alt="" class="img-fluid">
+      <img src="{{ asset($post->image) }}" alt="" class="img-fluid">
     </div>
 
     <ul>

@@ -7,6 +7,7 @@ use Auth;
 use Session;
 use App\Post;
 use App\Comment;
+use Intervention\Image\Facades\Image;
 
 class PostsController extends Controller
 {
@@ -25,14 +26,18 @@ class PostsController extends Controller
         $this->validate($request, [
             'category_id' => 'required',
             'title' => 'required',
-            'image' => 'required'
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2000'
         ]);
+
+        $product_image = $request->image;
+        $product_image_new_name = time().$product_image->getClientOriginalName();
+        $product_image->move('uploads/posts/', $product_image_new_name);
     
         $post = Post::create([
             'user_id' => auth()->user()->id,
             'category_id' => $request->category_id,
             'title' => $request->title,
-            'image' => $request->image
+            'image' => 'uploads/posts/'.$product_image_new_name
         ]);
 
         Session::flash('success', 'Post created');
@@ -76,13 +81,11 @@ class PostsController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'image' => 'required'
         ]);
 
         $post = Post::find($id);
 
         $post->title = $request->title;
-        $post->image = $request->image;
 
         $post->save();
 

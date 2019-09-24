@@ -10,6 +10,11 @@ use App\Comment;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => 'show']);
+    }
+
     public function create()
     {
         return view('posts.create');
@@ -58,7 +63,13 @@ class PostsController extends Controller
 
     public function edit($id)
     {
-        return view('posts.edit')->with('post', Post::findOrFail($id));
+        $post = Post::findOrFail($id);
+        if(Auth::id() == $post->user_id){
+            return view('posts.edit')->with('post', Post::findOrFail($id));
+        }
+    
+        return redirect()->back();
+
     }
 
     public function update(Request $request, $id)
@@ -78,5 +89,19 @@ class PostsController extends Controller
         Session::flash('success', 'Post updated');
 
         return redirect()->route('posts.show', ['id' => $post->id]);
+    }
+
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+        if(Auth::id() !== $post->user_id){
+            return redirect()->back();
+        }
+        $post->delete();
+
+        Session::flash('success', 'Post deleted');
+
+        return redirect()->route('home');
+
     }
 }

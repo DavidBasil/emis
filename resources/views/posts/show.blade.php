@@ -8,6 +8,11 @@
       <h3 class="pull-left">{{ $post->title }}</h3>
       @if (Auth::id() == $post->user->id)
         <a href="{{ route('posts.edit', ['id' => $post->id]) }}" class="">edit</a>
+        <form action="{{ route('posts.destroy', ['id' => $post->id]) }}" method="post">
+          @csrf
+          @method('delete')
+          <button type="submit" class="btn btn-danger">delete</button>
+        </form>
       @endif
       <p>
         <a href="{{ route('categories.show', ['id' => $post->category->id]) }}">{{ $post->category->title }}</a>
@@ -21,6 +26,13 @@
         <div>
           <textarea name="content" id="content" readonly>{{ $comment->content }}</textarea>
         </div>
+        @if (Auth::id() == $post->user_id)
+          <form action="{{ route('comment.destroy', ['id' => $comment->id]) }}" method="post">
+            @csrf
+            @method('delete')
+            <button type="submit" class="btn btn-danger btn-sm">delete comment</button>
+         </form> 
+        @endif
         {{ $comment->user->name }} 
         @if (Auth::id() == $comment->user_id)
           <input type="hidden" name="" id="commentId" value={{ $comment->id }}>

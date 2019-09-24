@@ -7,6 +7,7 @@ use Session;
 use Auth;
 use App\Comment;
 use App\Like;
+use App\Post;
 
 class CommentsController extends Controller
 {
@@ -47,6 +48,19 @@ class CommentsController extends Controller
 
         Session::flash('success', 'You unliked the reply.');
 
+        return redirect()->back();
+    }
+
+    public function destroy($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $postId = $comment->post_id;
+        $post = Post::findOrFail($postId);
+        if(Auth::id() !== $post->user_id)
+        {
+            return redirect()->back();
+        }
+        $comment->delete();
         return redirect()->back();
     }
 }

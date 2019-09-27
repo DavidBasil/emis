@@ -4,27 +4,36 @@
 
   <div class="card"> <!-- post card -->
 
+    <div class="card-header">
+      <h3>{{ $post->title }}</h3>
+        <span>
+        @auth
+          @if ((Auth::id() == $post->user->id) || (Auth::user()->admin))
+            <a href="{{ route('posts.edit', ['id' => $post->id]) }}" class="btn btn-primary mb-3">edit post</a>
+            <form action="{{ route('posts.destroy', ['id' => $post->id]) }}" method="post">
+              @csrf
+              @method('delete')
+              <button type="submit" class="btn btn-danger">delete post</button>
+            </form>
+          @endif
+        @endauth
+        </span>
+    </div>
+
     <div class="card-body">
-      <h3 class="pull-left">{{ $post->title }}</h3>
-      @if (Auth::id() == $post->user->id)
-        <a href="{{ route('posts.edit', ['id' => $post->id]) }}" class="">edit</a>
-        <form action="{{ route('posts.destroy', ['id' => $post->id]) }}" method="post">
-          @csrf
-          @method('delete')
-          <button type="submit" class="btn btn-danger">delete</button>
-        </form>
-      @endif
-      <p>
+      <p>Category: 
         <a href="{{ route('categories.show', ['id' => $post->category->id]) }}">{{ $post->category->title }}</a>
       </p>
       <img src="{{ asset($post->image) }}" alt="" class="img-fluid">
     </div>
 
+    <hr>
+
     <ul>
     @foreach ($post->comments as $comment)
       <li>
         <div>
-          <textarea name="content" id="content" readonly>{{ $comment->content }}</textarea>
+          <textarea name="content" id="content" class="form-control" readonly>{{ $comment->content }}</textarea>
         </div>
         @if (Auth::id() == $post->user_id)
           <form action="{{ route('comment.destroy', ['id' => $comment->id]) }}" method="post">
@@ -34,11 +43,11 @@
          </form> 
         @endif
         {{ $comment->user->name }} 
-        @if (Auth::id() == $comment->user_id)
+        @if ((Auth::id() == $comment->user_id))
+          <img src="{{ $comment->user->avatar }}" alt="" class="img-fluid mt-3" width="40">
           <input type="hidden" name="" id="commentId" value={{ $comment->id }}>
-          <button id="editComment">edit comment</button> 
+          <button id="editComment" class="btn btn-warning">edit comment</button> 
         @endif
-        <img src="{{ $comment->user->avatar }}" alt="" class="img-fluid" width="40">
         <p>
         @if ($comment->is_liked_by_user())
           <a href="{{ route('comment.unlike', ['id' => $comment->id]) }}" class="btn btn-danger btn-sm">Unlike</a>

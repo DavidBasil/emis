@@ -12,11 +12,11 @@
   <!-- Scripts -->
 
   <!-- Fonts -->
-  <link rel="dns-prefetch" href="//fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+  {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
+  {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> --}}
 
   <!-- Styles -->
-  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 </head>
 <body>
   <div id="app">
@@ -80,37 +80,40 @@
     <div class="py-4 container-fluid">
 
       <div class="row">
-      <div class="col-md-4">
-        <div class="card">
-          @auth
-            <a href="{{ route('posts.create') }}" class="btn btn-outline-primary m-2">Add a new post</a>
-          @else
-            <a href="{{ route('login') }}">Login</a> to create a new post
-          @endauth
-          <div class="card-header">Categories</div>
-          <div class="card-body">
-            <ul class="list-group">
-              @foreach ($categories as $category)
-               <li class="list-group-item">
-                 <a href="{{ route('categories.show', ['id' => $category->id]) }}">{{ $category->title }}</a>
-               </li> 
-              @endforeach
-            </ul>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+            @auth
+              <a href="{{ route('posts.create') }}" class="btn btn-outline-primary m-2">Add a new post</a>
+            @else
+              <a href="{{ route('login') }}">Log in</a> to create a new post
+            @endauth
+            </div>
+            <div class="card-body">
+              <ul class="list-group">
+                @foreach ($categories as $category)
+                  <li class="list-group-item">
+                    <a href="{{ route('categories.show', ['id' => $category->id]) }}">{{ $category->title }}</a>
+                  </li> 
+                @endforeach
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-8">
-        @yield('content')
-      </div>
+        <div class="col-md-8">
+          @yield('content')
+        </div>
 
       </div>
     </div>
   </div>
 
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <!-- scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
+{{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 @stack('scripts')
 </body>
 </html>

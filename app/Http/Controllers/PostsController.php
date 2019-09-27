@@ -69,7 +69,7 @@ class PostsController extends Controller
     public function edit($id)
     {
         $post = Post::findOrFail($id);
-        if(Auth::id() == $post->user_id){
+        if((Auth::id() == $post->user_id) || (Auth::user()->admin)){
             return view('posts.edit')->with('post', Post::findOrFail($id));
         }
     
@@ -97,7 +97,7 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        if(Auth::id() !== $post->user_id){
+        if(!(Auth::user()->admin) && (Auth::id() !== $post->user_id)){
             return redirect()->back();
         }
         $post->delete();

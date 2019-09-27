@@ -2,9 +2,9 @@
 
 @section('content')
 
-  <ul>
+  <ul class="list-group">
   @foreach ($posts as $post)
-    <li>
+    <li class="list-group-item">
       <a href="{{ route('posts.show', ['id' => $post->id]) }}">{{ $post->title }}</a>
     </li>
   @endforeach
